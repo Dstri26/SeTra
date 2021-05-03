@@ -11,10 +11,7 @@ if(isset($_POST["submit"])) {
   } else {
     $uploadOk = 0;
   }
-}
-if (file_exists($target_file)) {
-  $uploadOk = 0;
-}
+}   
 if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
 && $imageFileType != "gif" ) {
   $uploadOk = 0;
