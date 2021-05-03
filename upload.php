@@ -1,7 +1,7 @@
 <?php
 $target_dir = "./uploads/";
 $target_file = $target_dir . "example.jpg";
-echo $target_file;
+//echo $target_file;
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 if(isset($_POST["submit"])) {
@@ -19,12 +19,12 @@ if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg
 if ($uploadOk == 0) {
 } else {
   if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-    $link = "apilink?imgname=example.jpg";
+    $link = "http://127.0.0.1:5000/predict?imgname=example.jpg";
     $data = file_get_contents($link);
-    $response_data = json_decode($data);
-    $user_data = $response_data->author;
-    print_r($user_data);
-    header("Location: profile.php?food=$user_data");
+    //$response_data = json_decode($data);
+    //$user_data = $response_data->author;
+    //print_r($data);
+    header("Location: profile.php?food='$data'");
   } 
   else {
     echo "Sorry, there was an error uploading your file.";
