@@ -83,7 +83,7 @@
                                         </div>
                                         <div class="col col-contact">
                                             <div class="form-group modern-form__form-group--padding-r">
-                                                <input class="form-control input input-tr" name="cpassword" type="text" placeholder="Confirm Password">
+                                                <input class="form-control input input-tr" name="cpassword" type="password" placeholder="Confirm Password">
                                                 <div class="line-box">
                                                     <div class="line"></div>
                                                 </div>
