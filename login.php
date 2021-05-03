@@ -1,7 +1,7 @@
 <?php
 
 	session_start();
-	if(isset($_SESSION["em"]))
+	if(isset($_SESSION["name"]))
 	{
 		header("location:profile.php");
 	}
@@ -14,8 +14,9 @@
 		if ($arr=mysqli_fetch_assoc($result)) {
 			if ($arr["email"]==$email && $arr["password"]==$password) {
 
-				$_SESSION["email"]=$email;
-				header("location:http://127.0.0.1:5000/");
+				$_SESSION["name"]=$arr["name"];
+				$_SESSION["id"]=$arr["id"];
+				header("location:profile.php");
 
 			}
 			 else {

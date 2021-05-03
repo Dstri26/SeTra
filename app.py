@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,jsonify
 from cv2 import imwrite, imread, resize, imshow
 import cv2
 import numpy as np
@@ -26,15 +26,8 @@ app = Flask(__name__)
 
 @app.route('/predict', methods = ['GET', 'POST'])
 def predict():
-    """
-    image_name = request.get_data()
-    print(image_name)
-    return image_name
-    """
     imgname = request.args.get('imgname')
-
-    
-    print(imgname)
+    response= {}
     path = 'uploads/' + imgname
     x = imread(path)
     #x = np.invert(x)
@@ -45,8 +38,8 @@ def predict():
     x = x.reshape(1, 300, 300, 3)
     out = model.predict(x)
     #print(food_keys[np.argmax(out)])
-    response = food_keys[np.argmax(out)]
-    return str(response)
+    response['food_name'] = food_keys[np.argmax(out)]
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(debug = True)
