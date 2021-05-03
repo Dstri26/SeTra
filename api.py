@@ -25,7 +25,7 @@ model = tf.keras.models.load_model('densenet201_85.h5')
 app = Flask(__name__)
 
 @app.route('/predict', methods = ['POST'])
-def add_product():
+def predict():
     image_name = request.get_data()
     x = imread(image_name)
     #x = np.invert(x)
