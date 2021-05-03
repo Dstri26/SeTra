@@ -24,10 +24,19 @@ model = tf.keras.models.load_model('densenet201_85.h5')
 
 app = Flask(__name__)
 
-@app.route('/predict', methods = ['POST'])
+@app.route('/predict', methods = ['GET', 'POST'])
 def predict():
+    """
     image_name = request.get_data()
-    x = imread(image_name)
+    print(image_name)
+    return image_name
+    """
+    imgname = request.args.get('imgname')
+
+    
+    print(imgname)
+    path = 'uploads/' + imgname
+    x = imread(path)
     #x = np.invert(x)
     #imshow('test', x)
     #cv2.waitKey(0) 
@@ -37,7 +46,7 @@ def predict():
     out = model.predict(x)
     #print(food_keys[np.argmax(out)])
     response = food_keys[np.argmax(out)]
-    return response
+    return str(response)
 
 if __name__ == '__main__':
     app.run(debug = True)
