@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>SeTra</title>
+    <title>SeTra - Self Trainer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display:400,500,600,700,800,900">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -27,6 +27,7 @@
             <div class="row" style="padding-top: 5vh;width: auto;margin-bottom: 10vh;">
                 <div class="col-5" style="width: auto;padding: 0px;">
                     <section class="login-clean" style="height: 100%;border-top-left-radius: 20px;border-bottom-left-radius: 20px;background:rgba(0,0,0,0)">
+
                         <form method="post" action="./login.php">
                             <h2 class="sr-only" style="font-family: 'Playfair Display', serif;font-style: normal;font-weight: bold;color:#000">Login Form</h2>
                             <div class="illustration"><i class="icon ion-ios-navigate" style="color: #70E000;"></i></div>
@@ -36,10 +37,16 @@
                             <div class="form-group">
                                 <input class="form-control" type="password" name="password" placeholder="Password">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="login">
                                 <button class="btn btn-primary btn-block" type="submit" style="background: #70E000;">Log In</button>
                             </div>
-                            <a class="forgot" href="#">Forgot your password?</a>
+                            <?php
+                            if (isset($_GET['msg'])) {
+                            ?>
+                            <a style="color:red;font-size:1em;" class="forgot" href="#"><?php echo $_GET['msg']; ?></a>
+                            <?php
+                            }
+                            ?>
                         </form>
                     </section>
                 </div>
@@ -83,7 +90,7 @@
                                         </div>
                                         <div class="col col-contact">
                                             <div class="form-group modern-form__form-group--padding-r">
-                                                <input class="form-control input input-tr" name="cpassword" type="text" placeholder="Confirm Password">
+                                                <input class="form-control input input-tr" name="cpassword" type="password" placeholder="Confirm Password">
                                                 <div class="line-box">
                                                     <div class="line"></div>
                                                 </div>
@@ -106,7 +113,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-lg-8 mx-auto" style="background:#fff;">
-                    <p class="copyright text-muted text-center">© SeTra 2021 | Designed with&nbsp;<i style="color:#70E000;" class="fa fa-heart"></i> by Trideep Barik</p>
+                    <p class="copyright text-muted text-center">© SeTra 2021 | Developed with&nbsp;<i style="color:#70E000;" class="fa fa-heart"></i> by Trideep Barik and Suryansu Dash</p>
                 </div>
             </div>
         </div>
