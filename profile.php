@@ -2,7 +2,7 @@
     session_start();
     if(isset($_POST["submit"])){
         $target_dir = "./uploads/";
-        $target_file = $target_dir . "example.jpg";
+        $target_file = $target_dir . $_SESSION['id'].".jpg";
         //echo $target_file;
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
@@ -21,7 +21,7 @@
         if ($uploadOk == 0) {
         } else {
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            $link = "http://127.0.0.1:5000/predict?imgname=example.jpg";
+            $link = "http://127.0.0.1:5000/predict?imgname=".$_SESSION['id'].".jpg";
             $data = file_get_contents($link);
             $response_data = json_decode($data);
             $user_data = $response_data->food_name;
@@ -57,7 +57,7 @@
                   <a class="nav-link active" href="#"> <?php echo $_SESSION['name'];?></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Calories Count</a>
+                  <a class="nav-link" href="./history.php">Calories History</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="./logout.php">Logout</a>
@@ -82,16 +82,32 @@
     </div>
 
     <div class="upload" id="upload">
-        <div class="jumbotron text-center" style="height: auto;background-attachment:fixed;background: #fff;">
+    <div class="jumbotron text-center" style="height: auto;background-attachment:fixed;background: #fff;">
                     <h1 class="display-4">Count Your Calories!</h1><br>
-                    <p style="font-size:1.6em;" class="lead"> <strong><span style="color:rgb(219, 150, 0)">Snap</span> . &nbsp; <span style="color:rgb(255, 102, 0)">Upload </span> .&nbsp; <span style="color:rgb(165, 0, 0)">Burn </span>.</strong></p><br>
-                    <br><br>
+                    <p style="font-size:1.6em;" class="lead"> <strong><span style="color:rgb(219, 150, 0)">Snap&nbsp; <i class="fa fa-camera"></i></span> &nbsp;. &nbsp; <span style="color:rgb(255, 102, 0)">Upload &nbsp;<i class="fa fa-upload"></i></span> &nbsp;.&nbsp; <span style="color:rgb(165, 0, 0)">Burn&nbsp; <i class="fa fa-fire"></i></span>&nbsp;.</strong></p>
+                    <?php
+                        if(isset($_POST["caloriesubmit"])){
+                            date_default_timezone_set("Asia/Kolkata");
+                            $userid = $_SESSION['id'];
+                            $foodname = $_POST['foodname'];
+                            $quantity = $_POST['qty'];
+                            $calories=256;
+                            include 'config.php';
+                            mysqli_query($con,"insert into test1(userid,foodname,quantity,calories) values('$userid','$foodname','$quantity','$calories')");
+                            echo "<br><br><p class='lead'><h1><strong>".$foodname."</strong> of quantity <strong>".$quantity."</strong> is of <strong style='color:red;'>".$calories."</strong> calories</h1></p>";
+                            echo "<br><small>Data Saved in your History!</small>";
+                        }
+                        
+                    ?> 
+    </div>
+        <div class="jumbotron text-center" style="height: auto;background: url(https://wallpapercave.com/wp/wp3469887.jpg) center / cover no-repeat;background-attachment:fixed;">
+                    
                     <?php
                         if(isset($user_data)){
                             
                     ?>
                                 
-                        <form action="">
+                        <form action="" method="POST">
                             <center>
                             <div class="card" style="width: 18rem;">
                                 <img class="card-img-top" src="<?php echo $target_file;?>" alt="<?php echo $target_file;?>">
@@ -101,11 +117,27 @@
                                     <?php
                                             foreach ($user_data as $food) {
                                     ?>
+                                    <label for="foodname"><i class="fa fa-cutlery"></i> &nbsp;(If wrong, change it)</label>
+
+                                    <select class="custom-select mr-sm-2" name="foodname" required>
+
+                                        <option value="<?php echo $food; ?>" selected="selected">Detected : <?php echo $food; ?> </option>
+                                        <option value="Cheesecake">Cheesecake</option>
+                                        <option value="Chicken Curry">Chicken Curry</option>
+                                        <option value="Donuts">Donuts</option>
+                                        <option value="French Fries">French Fries</option>
+                                        <option value="Fried Rice">Fried Rice</option>
+                                        <option value="Grilled Cheese Sandwich">Grilled Cheese Sandwich</option>
+                                        <option value="Icecream">Icecream</option>
+                                        <option value="Omelette">Omelette</option>
+                                        <option value="Pizza">Pizza</option>
+                                        <option value="Samosa">Samosa</option>
+
+                                    </select> <br>
 
                                     <div class="form-group">
-                                        <label for="<?php echo $food; ?>"><?php echo $food; ?>&nbsp; <em>(Qty.) :</em> </label>
-                                        <input type="number" name="<?php echo $food; ?>" class="form-control" id="<?php echo $food; ?>" placeholder="Enter Quantity">
-                                        <!-- <small id="emailHelp" class="form-text text-muted"></small> -->
+                                        <label for="qty"> Food Quantity </label>
+                                        <input type="number" name="qty" class="form-control" placeholder="Enter Quantity" required>
                                     </div>
                                     <?php
 
@@ -126,11 +158,10 @@
                     }
                     ?>
                     <?php
-                        if(!isset($user_data)){
-                            
+                        if(!isset($user_data)){       
                     ?>
                     <p style="font-size:0.8em;">
-                        <h4>Instructions :- </h4><br>  
+                        <h3>Instructions :- </h3><br>  
                         <ul style="list-style-type:none;">
                             <li >Lorem ipsum dolor eius labore inventore non aut veritatis hic adipisci nulla </li>
                             <li >Lorem ipsum dolor eius labore inventore non aut veritatis hic adipisci nulla non aut veritatis hic adipisci nulla </li>
@@ -143,7 +174,7 @@
                     <p class="lead">
                             <form action="" method="post" enctype="multipart/form-data">
                                 <dl>
-                                <input type="file" name="fileToUpload" id="fileToUpload">
+                                <input type="file" name="fileToUpload" id="fileToUpload" required>
                                 </dl>
                                 <p>
                                     <input class="btn btn-success btn-lg" type="submit" value="Upload Image" name="submit">
