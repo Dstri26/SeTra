@@ -1,5 +1,12 @@
 <?php
 session_start();
+include 'config.php';
+$id=$_SESSION['id'];
+$date= date('Y-m-d');
+$start=date("Y-m-d G:i:s",strtotime($date));
+$end =date("Y-m-d G:i:s",strtotime($date.' +1day'));
+$currentcalories=mysqli_query($con,"SELECT SUM(calories) FROM test1 WHERE userid='$id' and ctime >='$start' AND ctime< '$end' ");
+$calarr=mysqli_fetch_assoc($currentcalories);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,16 +48,16 @@ session_start();
                 </li>
               </ul>
           </nav>
-          <div class="jumbotron" style="min-height: 80vh;background:url('./assets/img/bg.jpg') center / cover no-repeat;background-attachment:fixed;">
+          <div class="jumbotron text-right" style="min-height: 50vh;background:url('https://cdn.hipwallpaper.com/i/31/14/OXcgSH.jpg') center / cover no-repeat;background-attachment:fixed;">
             <div class="row">
+                <div class="col-md-4"></div>
                 <div class="col-md-7">
-                    <h1 class="display-2">Welcome Buddy!</h1>
-                    <p class="lead">Let's start together the journey into a healthier future</p><br>
-                    <hr class="my-4"><br>
-                    <p style="width: 50vw;font-size:0.8em;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                    <h2>Calories To Burn Today!</h2>
+                    <p class="lead">Here are some activities to burn calories</p><br>
+                    <h1 class="display-1" style="color:#000; "><strong><?php echo $calarr['SUM(calories)']; ?></strong></h1> <small>Kcal</small>
                     <p class="lead">
                         <br>
-                      <a class="btn btn-success btn-lg" href="#upload" role="button">Get Started!</a>
+                      <a class="btn btn-danger btn-lg" href="#upload" role="button">Start Activities!</a>
                     </p>
                   </div>
                 </div>
@@ -61,13 +68,11 @@ session_start();
                     <h1 class="display-4">Calories Earned!</h1><br><br><br> 
                     <table class="table table-borderless">
                         <?php
-                        include 'config.php';
-                        $id=$_SESSION['id'];
                         $calories=mysqli_query($con,"select * from test1 where userid='$id'");                        
                         if ($calories->num_rows > 0) {
                             echo "<thead><tr><th scope='col'>Time</th><th scope='col'>Food Item</th><th scope='col'>Quantity</th><th scope='col'>Calories</th><th scope='col'> </th></tr></thead><tbody>";
                           while($row = mysqli_fetch_assoc($calories)) {
-                            echo "<tr><td>".$row["time"]."</td><td>".$row["foodname"]."</td><td>".$row["quantity"]."</td><td>".$row["calories"]."</td><td><a href='edit.php'><i style='color:green' class='fa fa-edit'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='delete.php'><i style='color:red' class='fa fa-trash'></i></a>&nbsp;&nbsp;&nbsp;</td></tr>";
+                            echo "<tr><td>".$row["ctime"]."</td><td>".$row["foodname"]."</td><td>".$row["quantity"]."</td><td>".$row["calories"]."</td><td><a href='edit.php'><i style='color:green' class='fa fa-edit'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='delete.php'><i style='color:red' class='fa fa-trash'></i></a>&nbsp;&nbsp;&nbsp;</td></tr>";
                           }
                         ?>
                           
@@ -78,6 +83,15 @@ session_start();
                         ?>
                 
     </div>
+    <footer id="footerpad" style="background:#fff;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-lg-8 mx-auto" style="background:#fff;">
+                    <p class="copyright text-muted text-center">© SeTra 2021 | Developed with&nbsp;<i style="color:#70E000;" class="fa fa-heart"></i> by Trideep Barik and Suryansu Dash</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
         
 
